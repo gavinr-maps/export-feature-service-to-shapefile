@@ -32,32 +32,62 @@
     </div>
     <div id="wrapper" class="hidden">
       <form class="">
-        <calcite-input
-          placeholder="ItemID of a feature service to export"
-          id="itemIdInput"
-          value="8c2d6d7df8fa4142b0a1211c8dd66903"
-          class="mb-2"
-        ></calcite-input>
+        <!-- For demo itemids, try this: -->
+        <!-- https://arcgis.com/home/search.html?restrict=false&sortField=relevance&searchTerm=owner%3Aesri_dm&focus=layers-weblayers-features -->
+        <calcite-label>
+          <span>
+            Item ID
+            <calcite-button
+              href="https://arcgis.com/home/search.html?restrict=false&sortField=relevance&searchTerm=owner%3Aesri_dm&focus=layers-weblayers-features"
+              target="_blank"
+              appearance="transparent"
+              icon-start="launch"
+              title="Find other item IDs to test with"
+            ></calcite-button>
+          </span>
+          <calcite-input
+            placeholder="ItemID of a feature service to export"
+            id="itemIdInput"
+            value="8c2d6d7df8fa4142b0a1211c8dd66903"
+            class="mb-2"
+          ></calcite-input
+        ></calcite-label>
         <!-- Options: -->
         <!-- https://developers.arcgis.com/rest/users-groups-and-items/export-item/#request-parameters -->
-        <calcite-select class="mb-4" id="exportTypeInput">
-          <calcite-option value="Shapefile">Shapefile</calcite-option>
-          <calcite-option value="CSV">CSV</calcite-option>
-          <calcite-option value="File Geodatabase"
-            >File Geodatabase</calcite-option
-          >
-          <calcite-option value="Feature Collection"
-            >Feature Collection</calcite-option
-          >
-          <calcite-option value="GeoJson">GeoJson</calcite-option>
-          <calcite-option value="Scene Package">Scene Package</calcite-option>
-          <calcite-option value="KML">KML</calcite-option>
-          <calcite-option value="Excel">Excel</calcite-option>
-        </calcite-select>
+        <calcite-label
+          ><span
+            >Export type
+            <calcite-button
+              href="https://developers.arcgis.com/rest/users-groups-and-items/export-item/#request-parameters"
+              target="_blank"
+              appearance="transparent"
+              icon-start="information"
+            ></calcite-button>
+          </span>
 
-        <div class="float-right">
+          <calcite-select class="mb-4" id="exportTypeInput">
+            <calcite-option value="Shapefile">Shapefile</calcite-option>
+            <calcite-option value="CSV">CSV</calcite-option>
+            <calcite-option value="File Geodatabase"
+              >File Geodatabase</calcite-option
+            >
+            <calcite-option value="Feature Collection"
+              >Feature Collection</calcite-option
+            >
+            <calcite-option value="GeoJson">GeoJson</calcite-option>
+            <calcite-option value="Scene Package">Scene Package</calcite-option>
+            <calcite-option value="KML">KML</calcite-option>
+            <calcite-option value="Excel">Excel</calcite-option>
+          </calcite-select>
+        </calcite-label>
+
+        <div class="float-right text-right">
           <calcite-button id="exportButton">Export</calcite-button>
           <calcite-button id="logoutButton">Logout</calcite-button>
+          <div class="text-gray-700 italic mt-2">
+            Warning: Clicking "Export" above will create <br />an item in your
+            portal content. You can delete it afterwards.
+          </div>
         </div>
       </form>
 
