@@ -1,8 +1,10 @@
 # Export a Feature Service to Shapefile
 
-(or other formats)
+Export a feature service to a shapefile, CSV, Excel, and other formats.
 
 Demo by Gavin Rehkemper
+
+[Click here to see the live demo](https://gavinr-maps.github.io/export-feature-service-to-shapefile/)
 
 ## How it works
 
