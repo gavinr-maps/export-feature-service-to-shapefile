@@ -139,8 +139,9 @@ const main = async () => {
         exportTypeInput.value
       );
       console.log("RESULT:", result);
+      console.log("portal:", portal);
       const downloadUrl = `${portal.restUrl}/content/items/${result.itemId}/data?token=${credential.token}`;
-      results.innerHTML = `<h2 class="underline clear-both">Results</h2>Created item: <a target="_blank" class="underline" href="https://arcgis.com/home/item.html?id=${result.itemId}?token=${credential.token}">Item</a><br />
+      results.innerHTML = `<h2 class="underline clear-both">Results</h2>Created item: <a target="_blank" class="underline" href="${portal.url}/home/item.html?id=${result.itemId}?token=${credential.token}">Item</a><br />
         Download: <a target="_blank" class="underline" href="${downloadUrl}">Click here</a><br />
         `;
       window.open(downloadUrl);
