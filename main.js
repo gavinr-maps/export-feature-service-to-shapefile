@@ -1,23 +1,19 @@
-import MapView from "@arcgis/core/views/MapView.js";
 import Portal from "@arcgis/core/portal/Portal.js";
 import OAuthInfo from "@arcgis/core/identity/OAuthInfo.js";
 import esriId from "@arcgis/core/identity/IdentityManager.js";
 import esriRequest from "@arcgis/core/request.js";
-import * as geoprocessor from "@arcgis/core/rest/geoprocessor.js";
+// import * as geoprocessor from "@arcgis/core/rest/geoprocessor.js";
 
 const oAuthOptions = {
   // https://prof-services.maps.arcgis.com/home/item.html?id=bd2f2c00808747c2a5bee10040f0cc31#overview
   appId: "5zExhoFVwOyHuQaL",
-  portalUrl: "https://prof-services.maps.arcgis.com", // INCLUDE IF USING ARCGIS ENTERPRISE!
+  // portalUrl: "https://prof-services.maps.arcgis.com", // INCLUDE IF USING ARCGIS ENTERPRISE!
   popup: false,
 };
 
-const checkSignIn = async () => {
+const checkSignIn = async (portalUrl) => {
   try {
-    const credential = await esriId.checkSignInStatus(
-      oAuthOptions.portalUrl + "/sharing"
-    );
-    console.log("credential", credential);
+    const credential = await esriId.checkSignInStatus(portalUrl + "/sharing");
     const portal = new Portal({
       authMode: "immediate",
     });
@@ -34,17 +30,17 @@ const signOut = () => {
   esriId.destroyCredentials();
   window.location.reload();
 };
-const signIn = async () => {
+const signIn = async (portalUrl) => {
   // If the user is not signed in, generate a new credential.
-  await esriId.getCredential(oAuthOptions.portalUrl + "/sharing", {
+  await esriId.getCredential(portalUrl + "/sharing", {
     oAuthPopupConfirmation: false,
   });
 
-  await updateUI();
+  await updateUI(portalUrl);
 };
 
-const updateUI = async () => {
-  const signInResult = await checkSignIn();
+const updateUI = async (portalUrl) => {
+  const signInResult = await checkSignIn(portalUrl);
 
   if (signInResult) {
     loginButtonWrapper.classList.add("hidden");
@@ -97,7 +93,6 @@ const exportToFile = async (portal, itemId, exportFormat) => {
       }
     );
     result = res.data;
-    console.log("result", result);
 
     results.innerHTML = `<h2 class="underline clear-both">Results</h2>Processing: <br /><pre class="w-full overflow-auto">${new Date()} - ${JSON.stringify(
       res
@@ -115,11 +110,11 @@ const main = async () => {
   const info = new OAuthInfo(oAuthOptions);
   esriId.registerOAuthInfos([info]);
 
-  await updateUI();
+  await updateUI(info.portalUrl);
 
   // // When the login button is clicked, start the login process:
   loginButton.addEventListener("click", () => {
-    signIn();
+    signIn(info.portalUrl);
   });
 
   logoutButton.addEventListener("click", () => {
@@ -128,7 +123,7 @@ const main = async () => {
 
   // When the "create service" button is clicked, create the feature service
   exportButton.addEventListener("click", async () => {
-    const signInResult = await checkSignIn();
+    const signInResult = await checkSignIn(info.portalUrl);
     if (signInResult && itemIdInput.value !== "") {
       // createFS(portal, itemIdInput.value);
       const [portal, credential] = signInResult;
@@ -138,8 +133,6 @@ const main = async () => {
         itemIdInput.value,
         exportTypeInput.value
       );
-      console.log("RESULT:", result);
-      console.log("portal:", portal);
       const downloadUrl = `${portal.restUrl}/content/items/${result.itemId}/data?token=${credential.token}`;
       results.innerHTML = `<h2 class="underline clear-both">Results</h2>Created item: <a target="_blank" class="underline" href="${portal.url}/home/item.html?id=${result.itemId}?token=${credential.token}">Item</a><br />
         Download: <a target="_blank" class="underline" href="${downloadUrl}">Click here</a><br />
